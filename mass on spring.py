@@ -28,29 +28,29 @@ def displacement(u, a, t):
 
 def simulate(m, g, k, t_gap, duration, L):
     f_g = m*g
+    a_net = f_g
     x = 0
-    a = f_g
     u = 0
     t_elapsed = 0
     x_total = 0
     length_total = [L]
     li_time = [0]
     while t_elapsed < duration:
-        t_elapsed += t_gap # elapsed time increases by a little bit
+        t_elapsed += t_gap # elapsed time increases by a little bit (t_gap should be close to 0)
         li_time.append(t_elapsed)
-        v_now = velo(u, a, t_gap) # we consider motion in uniform acceleration for that short time, using previous net acceleration
-        x = displacement(u, a, t_gap) # displacement during that time (again, considering no change in acceleration during that short time)
+        x = displacement(u, a_net, t_gap) # displacement during that time (considering no change in acceleration during that short time)
         x_total += x
-        length_total.append(L+x)
+        length_total.append(length_total[len(length_total)-1]+x)
+        v_now = velo(u, a_net, t_gap) # we consider motion in uniform acceleration for that short time, using previous net acceleration
         u = v_now
-        a = acc(f_g, (k*x_total), m) # net acceleration calculated again for improvement
+        a_net = acc(f_g, (k*x_total), m) # net acceleration calculated again for improvement
     
     return length_total, li_time
 
 m = 100
 g = 9.8
 k = 5
-t_gap = 0.01
+t_gap = 0.001
 duration = 200
 L = 10
 length_total = simulate(m, g, k, t_gap, duration, L)[0]
