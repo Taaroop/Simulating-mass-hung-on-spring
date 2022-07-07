@@ -13,7 +13,7 @@ def f_spring(k, x):
     f_spring = -(k*x)
     return f_spring
 
-# One dimanetional motion equations
+# One dimensional motion equations
 
 def velo(u, a, t):
     v = u+(a*t)
